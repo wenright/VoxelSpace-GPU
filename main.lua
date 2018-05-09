@@ -8,6 +8,8 @@ local heightMap, colorMap
 function love.load()
   heightMap = love.image.newImageData('height.png')
   colorMap = love.image.newImageData('color.png')
+
+  love.graphics.setBackgroundColor(0.7, 0.8, 0.9)
 end
 
 function love.draw()
@@ -23,7 +25,7 @@ function love.draw()
       local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
 
       love.graphics.setColor(getColor(leftPointX, leftPointY, colorMap))
-      love.graphics.line(x, drawHeight, x, love.graphics.getHeight())
+      love.graphics.points(x, drawHeight)
 
       leftPointX = leftPointX + dx
     end
