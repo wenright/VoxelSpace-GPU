@@ -1,4 +1,4 @@
-local drawDistance = 150
+local drawDistance = 1000
 local cameraHeight = 0.5
 local horizon = 120
 local heightScale = 120000
@@ -29,21 +29,22 @@ function love.draw()
   sinPhi = math.sin(phi)
   cosPhi = math.cos(phi)
 
-  for z=drawDistance, 1, -1 do
+  for z=drawDistance, 1, -3 do
     local leftPointX, leftPointY  = -cosPhi * z  - sinPhi * z + startPoint.x, sinPhi * z - cosPhi * z + startPoint.y
     local rightPointX, rightPointY = cosPhi * z - sinPhi * z + startPoint.x,  -sinPhi * z - cosPhi * z + startPoint.y
 
     local dx = (rightPointX - leftPointX) / love.graphics.getWidth()
     local dy = (rightPointY - leftPointY) / love.graphics.getWidth()
 
-    for x=0, love.graphics.getWidth() do
+    local skip = 5
+    for x=0, love.graphics.getWidth(), skip do
       local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
 
       love.graphics.setColor(getColor(leftPointX, leftPointY, colorMap))
-      love.graphics.line(x, drawHeight, x, love.graphics.getHeight())
+      love.graphics.rectangle('fill', x, drawHeight, skip, 100)
 
-      leftPointX = leftPointX + dx
-      leftPointY = leftPointY + dy
+      leftPointX = leftPointX + dx * skip
+      leftPointY = leftPointY + dy * skip
     end
   end
 
