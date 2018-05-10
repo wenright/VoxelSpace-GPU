@@ -5,6 +5,10 @@ local heightScale = 120000
 
 local heightMap, colorMap
 
+local phi = 0
+
+local startPoint = {x = 0, y = 0}
+
 function love.load()
   heightMap = love.image.newImageData('height.png')
   colorMap = love.image.newImageData('color.png')
@@ -12,22 +16,34 @@ function love.load()
   love.graphics.setBackgroundColor(0.7, 0.8, 0.9)
 end
 
-function love.draw()
-  local startPoint = {x = 0, y = 0}
+function love.update(dt)
+  if love.keyboard.isDown('a') then
+    phi = phi + dt
+  elseif love.keyboard.isDown('d') then
+    phi = phi - dt
+  end
+end
 
-  -- https://github.com/s-macke/VoxelSpace
+function love.draw()
+  -- Sin/Cos precalculations
+  sinPhi = math.sin(phi)
+  cosPhi = math.cos(phi)
+
   for z=drawDistance, 1, -1 do
-    local leftPointX, leftPointY  = -z + startPoint.x, -z + startPoint.y
-    local rightPointX, rightPointY = z + startPoint.x,  z + startPoint.y
+    local leftPointX, leftPointY  = -cosPhi * z  - sinPhi * z + startPoint.x, sinPhi * z - cosPhi * z + startPoint.y
+    local rightPointX, rightPointY = cosPhi * z - sinPhi * z + startPoint.x,  -sinPhi * z - cosPhi * z + startPoint.y
 
     local dx = (rightPointX - leftPointX) / love.graphics.getWidth()
+    local dy = (rightPointY - leftPointY) / love.graphics.getWidth()
+
     for x=0, love.graphics.getWidth() do
       local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
 
       love.graphics.setColor(getColor(leftPointX, leftPointY, colorMap))
-      love.graphics.points(x, drawHeight)
+      love.graphics.points(x, drawHeight, x, drawHeight + 1, x, drawHeight + 2, x, drawHeight + 3)
 
       leftPointX = leftPointX + dx
+      leftPointY = leftPointY + dy
     end
   end
 
