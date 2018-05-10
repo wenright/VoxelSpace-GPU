@@ -40,7 +40,7 @@ function love.draw()
       local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
 
       love.graphics.setColor(getColor(leftPointX, leftPointY, colorMap))
-      love.graphics.points(x, drawHeight, x, drawHeight + 1, x, drawHeight + 2, x, drawHeight + 3)
+      love.graphics.line(x, drawHeight, x, love.graphics.getHeight())
 
       leftPointX = leftPointX + dx
       leftPointY = leftPointY + dy
