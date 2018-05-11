@@ -3,6 +3,8 @@ local cameraHeight = 0.5
 local horizon = 120
 local heightScale = 120000
 
+local backgroundColor = {0.7, 0.8, 0.9}
+
 local heightMap, colorMap
 
 local phi = 0
@@ -13,7 +15,7 @@ function love.load()
   heightMap = love.image.newImageData('height.png')
   colorMap = love.image.newImageData('color.png')
 
-  love.graphics.setBackgroundColor(0.7, 0.8, 0.9)
+  love.graphics.setBackgroundColor(backgroundColor)
 end
 
 function love.update(dt)
@@ -40,7 +42,7 @@ function love.draw()
     for x=0, love.graphics.getWidth(), skip do
       local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
 
-      love.graphics.setColor(getColor(leftPointX, leftPointY, colorMap))
+      love.graphics.setColor(getFadedColor(leftPointX, leftPointY, colorMap, z))
       love.graphics.rectangle('fill', x, drawHeight, skip, 100)
 
       leftPointX = leftPointX + dx * skip
@@ -55,6 +57,18 @@ end
 function getColor(x, y, map)
   local x, y = math.floor(x + 0.5) % map:getWidth(), math.floor(y + 0.5) % map:getHeight()
   local r, g, b = map:getPixel(x, y)
+  return r, g, b
+end
+
+function getFadedColor(x, y, map, z)
+  local r, g, b = getColor(x, y, map)
+
+  local v = (drawDistance - z) / drawDistance
+
+  r = ((v * r) + ((1 - v) * backgroundColor[1])) / 2
+  g = ((v * g) + ((1 - v) * backgroundColor[2])) / 2
+  b = ((v * b) + ((1 - v) * backgroundColor[3])) / 2
+
   return r, g, b
 end
 
