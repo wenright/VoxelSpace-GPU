@@ -24,6 +24,18 @@ function love.update(dt)
   elseif love.keyboard.isDown('d') then
     phi = phi - dt
   end
+
+  if love.keyboard.isDown('w') then
+    startPoint = {
+      x = startPoint.x - (math.sin(phi) + math.cos(phi)) * dt * 100,
+      y = startPoint.y - (math.cos(phi) - math.sin(phi)) * dt * 100
+    }
+  elseif love.keyboard.isDown('s') then
+    startPoint = {
+      x = startPoint.x + (math.sin(phi) + math.cos(phi)) * dt * 100,
+      y = startPoint.y + (math.cos(phi) - math.sin(phi)) * dt * 100
+    }
+  end
 end
 
 function love.draw()
@@ -43,7 +55,7 @@ function love.draw()
       local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
 
       love.graphics.setColor(getFadedColor(leftPointX, leftPointY, colorMap, z))
-      love.graphics.rectangle('fill', x, drawHeight, skip, 100)
+      love.graphics.rectangle('fill', x, drawHeight, skip, 200)
 
       leftPointX = leftPointX + dx * skip
       leftPointY = leftPointY + dy * skip
