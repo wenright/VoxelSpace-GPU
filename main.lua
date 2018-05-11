@@ -63,11 +63,11 @@ end
 function getFadedColor(x, y, map, z)
   local r, g, b = getColor(x, y, map)
 
-  local v = (drawDistance - z) / drawDistance
+  local v = math.pow((drawDistance - z) / drawDistance, 0.5)
 
-  r = ((v * r) + ((1 - v) * backgroundColor[1])) / 2
-  g = ((v * g) + ((1 - v) * backgroundColor[2])) / 2
-  b = ((v * b) + ((1 - v) * backgroundColor[3])) / 2
+  r = ((v * r) + ((1 - v) * backgroundColor[1]))
+  g = ((v * g) + ((1 - v) * backgroundColor[2]))
+  b = ((v * b) + ((1 - v) * backgroundColor[3]))
 
   return r, g, b
 end
