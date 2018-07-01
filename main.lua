@@ -1,7 +1,4 @@
-local drawDistance = 1000
 local cameraHeight = 0.5
-local horizon = 120
-local heightScale = 120000
 
 local backgroundColor = {0.7, 0.8, 0.9}
 
@@ -11,18 +8,27 @@ local phi = 0
 
 local startPoint = {x = 0, y = 0}
 
+local rotationSpeed = 1
+
 function love.load()
-  heightMap = love.image.newImageData('height.png')
-  colorMap = love.image.newImageData('color.png')
+  heightMap = love.graphics.newImage('height.png')
+  heightMap:setWrap('repeat', 'repeat')
+  colorMap = love.graphics.newImage('color.png')
+  colorMap:setWrap('repeat', 'repeat')
 
   love.graphics.setBackgroundColor(backgroundColor)
+
+  myShader = love.graphics.newShader('shader.glsl')
+  myShader:send('heightMap', heightMap)
+  myShader:send('colorMap', colorMap)
+  print(myShader:getWarnings());
 end
 
 function love.update(dt)
   if love.keyboard.isDown('a') then
-    phi = phi + dt
+    phi = phi + dt * rotationSpeed
   elseif love.keyboard.isDown('d') then
-    phi = phi - dt
+    phi = phi - dt * rotationSpeed
   end
 
   if love.keyboard.isDown('w') then
@@ -36,31 +42,41 @@ function love.update(dt)
       y = startPoint.y + (math.cos(phi) - math.sin(phi)) * dt * 100
     }
   end
+
+  myShader:send('phi', phi)
+  myShader:send('player', {startPoint.x, startPoint.y, cameraHeight})
 end
 
 function love.draw()
+  love.graphics.setShader(myShader)
+
+  love.graphics.setColor(1, 1, 1)
+  love.graphics.rectangle('fill', 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+
+  love.graphics.setShader()
+
   -- Sin/Cos precalculations
-  sinPhi = math.sin(phi)
-  cosPhi = math.cos(phi)
-
-  for z=drawDistance, 1, -3 do
-    local leftPointX, leftPointY  = -cosPhi * z  - sinPhi * z + startPoint.x, sinPhi * z - cosPhi * z + startPoint.y
-    local rightPointX, rightPointY = cosPhi * z - sinPhi * z + startPoint.x,  -sinPhi * z - cosPhi * z + startPoint.y
-
-    local dx = (rightPointX - leftPointX) / love.graphics.getWidth()
-    local dy = (rightPointY - leftPointY) / love.graphics.getWidth()
-
-    local skip = 5
-    for x=0, love.graphics.getWidth(), skip do
-      local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
-
-      love.graphics.setColor(getFadedColor(leftPointX, leftPointY, colorMap, z))
-      love.graphics.rectangle('fill', x, drawHeight, skip, 200)
-
-      leftPointX = leftPointX + dx * skip
-      leftPointY = leftPointY + dy * skip
-    end
-  end
+  -- sinPhi = math.sin(phi)
+  -- cosPhi = math.cos(phi)
+  --
+  -- for z=drawDistance, 1, -3 do
+  --   local leftPointX, leftPointY  = -cosPhi * z  - sinPhi * z + startPoint.x, sinPhi * z - cosPhi * z + startPoint.y
+  --   local rightPointX, rightPointY = cosPhi * z - sinPhi * z + startPoint.x,  -sinPhi * z - cosPhi * z + startPoint.y
+  --
+  --   local dx = (rightPointX - leftPointX) / love.graphics.getWidth()
+  --   local dy = (rightPointY - leftPointY) / love.graphics.getWidth()
+  --
+  --   local skip = 5
+  --   for x=0, love.graphics.getWidth(), skip do
+  --     local drawHeight = (cameraHeight - getHeight(leftPointX, leftPointY, heightMap)) / z * heightScale + horizon
+  --
+  --     love.graphics.setColor(getFadedColor(leftPointX, leftPointY, colorMap, z))
+  --     love.graphics.rectangle('fill', x, drawHeight, skip, 200)
+  --
+  --     leftPointX = leftPointX + dx * skip
+  --     leftPointY = leftPointY + dy * skip
+  --   end
+  -- end
 
   love.graphics.setColor(1, 1, 1)
   love.graphics.print(love.timer.getFPS())
