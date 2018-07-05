@@ -8,7 +8,8 @@ local phi = 0
 
 local startPoint = {x = 0, y = 0}
 
-local rotationSpeed = 1
+local rotationSpeed = 2
+local moveSpeed = 100
 
 function love.load()
   heightMap = love.graphics.newImage('height.png')
@@ -33,13 +34,13 @@ function love.update(dt)
 
   if love.keyboard.isDown('w') then
     startPoint = {
-      x = startPoint.x - (math.sin(phi) + math.cos(phi)) * dt * 100,
-      y = startPoint.y - (math.cos(phi) - math.sin(phi)) * dt * 100
+      x = startPoint.x + (math.sin(phi + math.pi * 3 / 4) + math.cos(phi + math.pi * 3 / 4)) * dt * moveSpeed,
+      y = startPoint.y + (math.cos(phi + math.pi * 3 / 4) - math.sin(phi + math.pi * 3 / 4)) * dt * moveSpeed
     }
   elseif love.keyboard.isDown('s') then
     startPoint = {
-      x = startPoint.x + (math.sin(phi) + math.cos(phi)) * dt * 100,
-      y = startPoint.y + (math.cos(phi) - math.sin(phi)) * dt * 100
+      x = startPoint.x - (math.sin(phi + math.pi * 3 / 4) + math.cos(phi + math.pi * 3 / 4)) * dt * moveSpeed,
+      y = startPoint.y - (math.cos(phi + math.pi * 3 / 4) - math.sin(phi + math.pi * 3 / 4)) * dt * moveSpeed
     }
   end
 
