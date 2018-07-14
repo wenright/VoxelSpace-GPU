@@ -1,3 +1,8 @@
+GAME_WIDTH = 480
+GAME_HEIGHT = 320
+SCALE_X = 2
+SCALE_Y = 2
+
 function love.conf(t)
     t.identity = nil                    -- The name of the save directory (string)
     t.version = "11.1"                -- The LÖVE version this game was made for (string)
@@ -8,8 +13,8 @@ function love.conf(t)
 
     t.window.title = "Untitled"         -- The window title (string)
     t.window.icon = nil                 -- Filepath to an image to use as the window's icon (string)
-    t.window.width = 800                -- The window width (number)
-    t.window.height = 640               -- The window height (number)
+    t.window.width = GAME_WIDTH * SCALE_X               -- The window width (number)
+    t.window.height = GAME_HEIGHT * SCALE_Y
     t.window.borderless = false         -- Remove all border visuals from the window (boolean)
     t.window.resizable = false          -- Let the window be user-resizable (boolean)
     t.window.minwidth = 1               -- Minimum window width if the window is resizable (number)

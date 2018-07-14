@@ -12,10 +12,17 @@ local rotationSpeed = 2
 local moveSpeed = 100
 
 function love.load()
+  love.graphics.setDefaultFilter('nearest', 'nearest')
+
+  heightMapData = love.image.newImageData('height.png')
+
   heightMap = love.graphics.newImage('height.png')
   heightMap:setWrap('repeat', 'repeat')
+  heightMap:setFilter('nearest', 'nearest')
+
   colorMap = love.graphics.newImage('color.png')
   colorMap:setWrap('repeat', 'repeat')
+  colorMap:setFilter('nearest', 'nearest')
 
   love.graphics.setBackgroundColor(backgroundColor)
 
@@ -23,6 +30,8 @@ function love.load()
   myShader:send('heightMap', heightMap)
   myShader:send('colorMap', colorMap)
   print(myShader:getWarnings());
+
+  canvas = love.graphics.newCanvas(GAME_WIDTH, GAME_HEIGHT)
 end
 
 function love.update(dt)
@@ -44,11 +53,20 @@ function love.update(dt)
     }
   end
 
+  if love.keyboard.isDown('q') then
+    cameraHeight = cameraHeight - dt * rotationSpeed
+  elseif love.keyboard.isDown('e') then
+    cameraHeight = cameraHeight + dt * rotationSpeed
+  end
+
   myShader:send('phi', phi)
   myShader:send('player', {startPoint.x, startPoint.y, cameraHeight})
 end
 
 function love.draw()
+  love.graphics.setCanvas(canvas)
+  love.graphics.clear()
+
   love.graphics.setShader(myShader)
 
   love.graphics.setColor(1, 1, 1)
@@ -78,6 +96,13 @@ function love.draw()
   --     leftPointY = leftPointY + dy * skip
   --   end
   -- end
+
+  love.graphics.setCanvas()
+
+  love.graphics.setColor(1, 1, 1, 1)
+  love.graphics.setBlendMode('alpha', 'premultiplied')
+  love.graphics.draw(canvas, 0, 0, 0, SCALE_X, SCALE_Y)
+  love.graphics.setBlendMode('alpha')
 
   love.graphics.setColor(1, 1, 1)
   love.graphics.print(love.timer.getFPS())
