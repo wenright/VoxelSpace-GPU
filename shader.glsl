@@ -6,7 +6,7 @@ uniform vec3 player;
 vec4 backgroundColor = vec4(0.7, 0.8, 0.9, 1.0);
 float heightScale = 16000.0;
 float horizon = 100.0;
-float drawDistance = 150.0;
+float drawDistance = 200.0;
 
 vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coords) {
     float sinPhi = sin(phi);
@@ -26,8 +26,8 @@ vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coor
       leftPoint.x += dx * screen_coords.x;
       leftPoint.y += dy * screen_coords.x;
 
-      // leftPoint.x = floor(leftPoint.x);
-      // leftPoint.y = floor(leftPoint.y);
+      leftPoint.x = floor(leftPoint.x);
+      leftPoint.y = floor(leftPoint.y);
 
       leftPoint /= 200.0;
 
@@ -43,7 +43,8 @@ vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coor
         return color;
       }
 
-      dz *= 1.006;
+      dz *= 1.01;
+      // dz = dz + 0.008;
     }
 
     return color;
