@@ -13,7 +13,7 @@ vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coor
     float cosPhi = cos(phi);
     vec4 color = vec4(0, 0, 0, 0);
 
-    float dz = 0.25;
+    float dz = 0.2;
     for (float z = 1; z < drawDistance; z += dz) {
       vec2 leftPoint = vec2(-cosPhi * z - sinPhi * z + player.x,
           sinPhi * z - cosPhi * z + player.y);
@@ -25,9 +25,6 @@ vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coor
 
       leftPoint.x += dx * screen_coords.x;
       leftPoint.y += dy * screen_coords.x;
-
-      leftPoint.x = floor(leftPoint.x);
-      leftPoint.y = floor(leftPoint.y);
 
       leftPoint /= 200.0;
 
@@ -43,8 +40,8 @@ vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coor
         return color;
       }
 
-      dz *= 1.01;
-      // dz = dz + 0.008;
+      dz *= 1.006;
+      dz += 0.0001;
     }
 
     return color;

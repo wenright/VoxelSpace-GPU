@@ -59,16 +59,6 @@ function love.update(dt)
     cameraHeight = cameraHeight + dt * rotationSpeed
   end
 
-  -- startPoint.x = startPoint.x + math.cos(love.timer.getTime() / 2) * moveSpeed * dt
-  -- startPoint.y = startPoint.y + math.sin(love.timer.getTime()) * moveSpeed * dt
-
-  startPoint = {
-    x = startPoint.x + (math.sin(phi + math.pi * 3 / 4) + math.cos(phi + math.pi * 3 / 4)) * dt * moveSpeed,
-    y = startPoint.y + (math.cos(phi + math.pi * 3 / 4) - math.sin(phi + math.pi * 3 / 4)) * dt * moveSpeed
-  }
-
-  phi = phi + math.sin(love.timer.getTime() / 3) * rotationSpeed * dt
-
   myShader:send('phi', phi)
   myShader:send('player', {startPoint.x, startPoint.y, cameraHeight})
 end
@@ -92,7 +82,7 @@ function love.draw()
   love.graphics.setBlendMode('alpha')
 
   love.graphics.setColor(1, 1, 1)
-  love.graphics.print(love.timer.getFPS())
+  love.graphics.print(love.timer.getFPS() .. ' FPS')
 end
 
 function love.keypressed(key)
