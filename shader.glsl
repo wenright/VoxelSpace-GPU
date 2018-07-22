@@ -20,11 +20,8 @@ vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coor
       vec2 rightPoint =  vec2(cosPhi * z - sinPhi * z + player.x,
           -sinPhi * z - cosPhi * z + player.y);
 
-      float dx = (rightPoint.x - leftPoint.x) / love_ScreenSize.x;
-      float dy = (rightPoint.y - leftPoint.y) / love_ScreenSize.x;
-
-      leftPoint.x += dx * screen_coords.x;
-      leftPoint.y += dy * screen_coords.x;
+      vec2 delta = (rightPoint - leftPoint) / love_ScreenSize.x;
+      leftPoint += delta * screen_coords.x;
 
       leftPoint /= 200.0;
 
