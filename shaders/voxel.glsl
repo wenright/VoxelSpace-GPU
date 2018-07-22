@@ -37,6 +37,7 @@ vec4 effect(vec4 loveColor, Image texture, vec2 texture_coords, vec2 screen_coor
         return color;
       }
 
+      // These are used as quality, basically. Lower means higher quality, but worse performance
       dz *= 1.006;
       dz += 0.0001;
     }

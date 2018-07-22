@@ -14,19 +14,19 @@ local moveSpeed = 30
 function love.load()
   love.graphics.setDefaultFilter('nearest', 'nearest')
 
-  heightMapData = love.image.newImageData('height.png')
+  heightMapData = love.image.newImageData('maps/height.png')
 
-  heightMap = love.graphics.newImage('height.png')
+  heightMap = love.graphics.newImage('maps/height.png')
   heightMap:setWrap('repeat', 'repeat')
   heightMap:setFilter('nearest', 'nearest')
 
-  colorMap = love.graphics.newImage('color.png')
+  colorMap = love.graphics.newImage('maps/color.png')
   colorMap:setWrap('repeat', 'repeat')
   colorMap:setFilter('nearest', 'nearest')
 
   love.graphics.setBackgroundColor(backgroundColor)
 
-  myShader = love.graphics.newShader('shader.glsl')
+  myShader = love.graphics.newShader('shaders/voxel.glsl')
   myShader:send('heightMap', heightMap)
   myShader:send('colorMap', colorMap)
   print(myShader:getWarnings());
